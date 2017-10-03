@@ -1,0 +1,2 @@
+plotter.select_pen(1)
+plotter.pen_up([(100,100)])
