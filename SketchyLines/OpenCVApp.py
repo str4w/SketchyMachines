@@ -52,8 +52,8 @@ class OpenCVApp:
 
     def run(self):
         cv2.namedWindow(self.windowTitle)
-        capture = cv2.VideoCapture(self.videoDevice)
-        if capture is None or not capture.isOpened():
+        self.capture = cv2.VideoCapture(self.videoDevice)
+        if self.capture is None or not self.capture.isOpened():
             print ('OpenCVApp: Error: unable to open video source: %s'%(str(self.videoDevice)))
             cv2.destroyWindow(self.windowTitle)
             return
@@ -64,7 +64,7 @@ class OpenCVApp:
         self.frameTimesIndex=0
         ret = False
         while(not ret):
-            ret,frame = capture.read()
+            ret,frame = self.capture.read()
             if time.time()-startTime > 6.:
                 print ('OpenCVApp: Error: Unable to get a frame from the video source after 6 seconds, giving up')
                 return 
@@ -72,7 +72,7 @@ class OpenCVApp:
         loop = True
         self.lastTime=time.time()
         while(loop):
-            ret,self.rawFrame = capture.read()
+            ret,self.rawFrame = self.capture.read()
             if (self.rawFrame is None):
                 break
        

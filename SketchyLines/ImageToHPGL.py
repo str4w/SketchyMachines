@@ -15,7 +15,7 @@ from graph2 import Graph,replace_in_list,Edge
 import time
 import glob
 
-fbase="frame_20170814T213444"
+fbase="Output/frame_20171002T075236"
 
 def drawgraph(h):
     for e in h.edges:
@@ -85,10 +85,10 @@ for f in files:
 def jitter(a):
     return a+np.random.randn(len(a))*0.25
 lines=[ (jitter(a),jitter(b)) for a,b in lines]
-
+print("There are %d elements in lines"%(len(lines)))
 plt.imshow(Z)
 lim=plt.axis()
-for l in lines:
+for l in lines[:300]:
        plt.plot(l[1],l[0],'k-')
 plt.axis(lim)
 plt.title("Graph")
@@ -99,14 +99,14 @@ outextents=np.array([[100,100],[8100,10100]])
 scale=min( (outextents[1,0]-outextents[0,0])/(inextents[1,0]-inextents[0,0]),  (outextents[1,1]-outextents[0,1])/(inextents[1,1]-inextents[0,1]))
 incenter=(inextents[1,:]+inextents[0,:])/2.0
 outcenter=(outextents[1,:]+outextents[0,:])/2.0
-fd=open(fbase+".hpgl",'w')
-fd.write("SP1;\n")
-for l in lines:
-    xs=np.round((l[0]-incenter[0])*scale+outcenter[0]).astype(np.int)
-    ys=np.round((l[1]-incenter[1])*scale+outcenter[1]).astype(np.int)
-    fd.write("PU%d,%d;\n"%(xs[0],ys[0]))
-    for x,y in zip(xs,ys):
-        fd.write("PD%d,%d;\n"%(x,y))
-    fd.write("PU%d,%d;\n"%(xs[-1],ys[-1]))
-fd.write("SP0;\n")
+#fd=open(fbase+".hpgl",'w')
+#fd.write("SP1;\n")
+#for l in lines:
+#    xs=np.round((l[0]-incenter[0])*scale+outcenter[0]).astype(np.int)
+#    ys=np.round((l[1]-incenter[1])*scale+outcenter[1]).astype(np.int)
+#    fd.write("PU%d,%d;\n"%(xs[0],ys[0]))
+#    for x,y in zip(xs,ys):
+#        fd.write("PD%d,%d;\n"%(x,y))
+#    fd.write("PU%d,%d;\n"%(xs[-1],ys[-1]))
+#fd.write("SP0;\n")
 
