@@ -37,6 +37,7 @@ class SketchyLines(OpenCVApp):
         self.showStats=False
         self.showAppTitle=True
         self.showHelpMenu=False
+        self.showBackgroundImage=True
         self.fontSizeSmall=0.4
         self.fontThicknessSmall=1
         self.fontThicknessLarge=2
@@ -69,6 +70,8 @@ class SketchyLines(OpenCVApp):
             self.showHelpMenu=not self.showHelpMenu
         elif key == ord('s'):     
             self.showStats=not self.showStats
+        elif key == ord('b'):     
+            self.showBackgroundImage=not self.showBackgroundImage
         elif key == 27:
             return False
         
@@ -89,8 +92,9 @@ class SketchyLines(OpenCVApp):
            self.sumimage+=e
        self.edgeout=np.uint8(np.minimum(2.0*self.sumimage/len(self.edgeCache),255))
 #       print (frame.shape)
-       
-       outimg=np.minimum(cv2.cvtColor((255-self.edgeout),cv2.COLOR_GRAY2RGB),adjust_gamma(frame,2.0))
+       outimg=cv2.cvtColor((255-self.edgeout),cv2.COLOR_GRAY2RGB)
+       if self.showBackgroundImage:
+           outimg=np.minimum(outimg,adjust_gamma(frame,2.0))
        return outimg
     
     def overlay(self,frame):
@@ -117,21 +121,32 @@ class SketchyLines(OpenCVApp):
                         (int(resultFrame.shape[1]*0.5-sz[0]*0.5), int(resultFrame.shape[0]*0.1)),
                         self.font,self.fontSizeSmall,self.titleColor,self.fontThicknessSmall)
         if self.showHelpMenu:
+            vpos=0.2
+            vinc=0.05
             cv2.putText(resultFrame,"h - show / hide this menu",
-                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*0.2)),
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
                         self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
+            cv2.putText(resultFrame,"b - show / hide background",
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
+                        self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
             cv2.putText(resultFrame,"f - save current set of frames",
-                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*0.25)),
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
                         self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
             cv2.putText(resultFrame,"p - generate plot",
-                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*0.3)),
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
                         self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
             cv2.putText(resultFrame,"s - show / hide stats",
-                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*0.35)),
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
                         self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
             cv2.putText(resultFrame,"ESC - quit",
-                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*0.4)),
+                        (int(resultFrame.shape[1]*0.1), int(resultFrame.shape[0]*vpos)),
                         self.font,self.fontSizeSmall,self.menuColor,self.fontThicknessSmall)
+            vpos+=vinc
         return resultFrame
 
 
