@@ -1,0 +1,34 @@
+;http://www.sxlist.com/techref/language/hpgl.htm
+IN;
+SP1;
+PU3000,4000;
+PR;
+PD0,1000;
+PD1000,0,0,-1000,-1000,0;
+PU;
+PA5000,4500;
+CI500;
+PU;
+PA6500,4500;
+PD;
+RT100,250,500,500;
+;AA7000,4500,20,45;
+PU;
+;PA5000,1000;PD;
+;BZ6000,3000,8000,-3000,9000,1000;
+SP0;
+;
+;
+;               Specifies absolute
+;                                   plotting and moves to
+;                                   position (1000,5000) then
+;                                   puts the pen down.
+;BZ2000,8000,4000,2000,5000,5000;   Draws a bezier curve
+;                                   with (1000,5000) as the
+;                                   starting point (first
+;                                   control point). Specifies
+;                                   (2000,8000), (4000,2000),
+;                                   and (5000,5000) as the
+;                                   second, third and fourth
+;                                   control points.
+
