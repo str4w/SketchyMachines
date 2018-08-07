@@ -1,10 +1,39 @@
+class Pen
+{
+  boolean _doStroke;
+  color _stroke;
+  boolean _doFill;
+  color _fill;
+  int _id;
+  void set()
+  {
+    if (_doStroke)
+    {
+      stroke(_stroke);
+    }
+    else
+    {
+      noStroke();
+    }
+    if (_doFill)
+    {
+      fill(_fill);
+    }
+    else
+    {
+      noFill();
+    }
+  }
+}
+
 float pad=2.0;
 int rings=3;
-int splits=10;
-int hatches=10;
+int splits=20;
+int hatches=20;
 boolean writeLinesToFile=true;
 String LineFileName="Mondrian_jul30.lines";
 PrintWriter output;
+Pen[] pens;
 
 PVector intersection(PVector p1,PVector v1,PVector p2, PVector v2)
 {
@@ -22,38 +51,33 @@ float distance2d(PVector p1,PVector p2)
   return sqrt(dx*dx+dy*dy);
 }
 
-class Pen
+
+void setPen(Pen pen)
 {
-  boolean _doStroke;
-  color _stroke;
-  boolean _doFill;
-  color _fill;
-  void set()
-  {
-    if (_doStroke)
-    {
-      stroke(_stroke);
-    }
-    else
-    {
-      noStroke();
-    }
-    if (_doStroke)
-    {
-      fill(_fill);
-    }
-    else
-    {
-      noFill();
-    }
+  pen.set();
+  if (writeLinesToFile) {
+      output.println("PEN "+pen._id);
   }
 }
 
-void drawLine(x1,y1,x2,y2)
+void drawLine( float x1, float y1, float x2, float y2)
 {
+  line(x1,y1,x2,y2);
+  if (writeLinesToFile) {
+      output.println(x1+" " + y1*-1 +" " + x2 + " " + y2*-1);
+  }
 }
-void drawRectangle(x1,y1,x2,y2)
+
+void drawRectangle(float x1, float y1, float x2, float y2)
 {
+  rect(x1,y1,x2-x1,y2-y1);
+  if (writeLinesToFile) {
+           output.print(x1+" "+y1*-1+" ");
+           output.print(x2+" "+y1*-1+" ");
+           output.print(x2+" "+y2*-1+" ");
+           output.print(x1+" "+y2*-1+" ");
+           output.println(x1+" "+y1*-1);
+  }
 }
 
 class Rectangle
@@ -99,6 +123,7 @@ class Rectangle
         PVector v1=new PVector(c2.x-c1.x,c2.y-c1.y);
         PVector v2=new PVector((v1.x>0?-1:1),(v1.y>0?1:-1));
         println("c1: "+c1.x+", "+c1.y+" v1 "+v1.x+", "+v1.y);
+        setPen(pens[int(random(nbPens-1))+1]);
         for(int i=1;i<hatches;++i)
         {
           float alpha=(i/float(hatches))*(i/float(hatches));
@@ -127,32 +152,32 @@ class Rectangle
           {
             if (j!=min0 && dists[j]<dists[min1]) {min1=j;}
           }
-          
-          line(ps[min0].x,ps[min0].y,ps[min1].x,ps[min1].y);
-          if (writeLinesToFile) {
-             output.println(ps[min0].x+" " + ps[min0].y*-1 +" " + ps[min1].x + " " + ps[min1].y*-1);
-          }
+          drawLine(ps[min0].x,ps[min0].y,ps[min1].x,ps[min1].y);
+//          line(ps[min0].x,ps[min0].y,ps[min1].x,ps[min1].y);
+//          if (writeLinesToFile) {
+//             output.println(ps[min0].x+" " + ps[min0].y*-1 +" " + ps[min1].x + " " + ps[min1].y*-1);
+//          }
 
         }
         
       }
+      setPen(pens[0]);
       for(int i=1;i<=rings;++i)
       {
-        noFill();
-       // stroke(0);
         float w=i-0.5;
         float x1=_a.x+pad*w;
         float x2=_b.x-pad*w;
         float y1=_a.y+pad*w;
         float y2=_b.y-pad*w;
-        rect(x1,y1,x2-x1,y2-y1);
-        if (writeLinesToFile) {
-           output.print(x1+" "+y1*-1+" ");
-           output.print(x2+" "+y1*-1+" ");
-           output.print(x2+" "+y2*-1+" ");
-           output.print(x1+" "+y2*-1+" ");
-           output.println(x1+" "+y1*-1);
-        }
+        drawRectangle(x1,y1,x2,y2);
+//        rect(x1,y1,x2-x1,y2-y1);
+//        if (writeLinesToFile) {
+//           output.print(x1+" "+y1*-1+" ");
+//           output.print(x2+" "+y1*-1+" ");
+//           output.print(x2+" "+y2*-1+" ");
+//           output.print(x1+" "+y2*-1+" ");
+//           output.println(x1+" "+y1*-1);
+//        }
       }
     }
   }
@@ -194,6 +219,7 @@ class Rectangle
 }
 
 float padding=3;
+int nbPens=5;
 void setup()
 {
   size(1100,850);
@@ -203,6 +229,17 @@ void setup()
   if (writeLinesToFile) {
     output=createWriter(LineFileName);
   }
+  pens=new Pen[nbPens];
+  for (int i=0;i<nbPens;++i)
+  {
+    pens[i]=new Pen();
+    pens[i]._id=i;
+    pens[i]._doStroke=true;
+    pens[i]._doFill=false;
+    pens[i]._stroke=color(int(random(128))+64,int(random(128))+64,int(random(128))+64);
+    pens[i]._fill=color(int(random(128))+64,int(random(128))+64,int(random(128)))+64;
+  }
+  pens[0]._stroke=color(0,0,0);
 }
 void draw()
 {
