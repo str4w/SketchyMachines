@@ -11,20 +11,30 @@ import ImageToVectors #as i2v # import make_lines_from_images,organize_lines
 
 fbase="SketchyEggOutput/frame_20180324T170312" # rupe
 fbase="SketchyEggOutput/frame_20180325T165316"
+#lines=ImageToVectors.make_lines_from_images(fbase+"_edges.png",[(90,120),(556,442)])
 files=sorted(glob.glob(fbase+"_edges.png"))
-lines=ImageToVectors.make_lines_from_images(files,[(90,120),(556,442)])
+fbase="Output/frame_20180814T155843" # Rupe close up
+files=sorted(glob.glob(fbase+"_*.png"))
+ImageToVectors.condense_images(files,0.4,fbase+"_edges.png")
+lines=ImageToVectors.make_lines_from_images([fbase+"_edges.png"],None)
 finallines=ImageToVectors.organize_lines(lines)
 
 #lines=[ (jitter(a),jitter(b)) for a,b in lines]
 print("There are %d elements in lines"%(len(finallines)))
+
+fd=open(fbase+".lines",'w')
+for l in finallines:
+    for (x,y) in zip(l[0],l[1]):
+        fd.write("%f %f "%(y,-x))
+    fd.write("\n")
 
 #for i,l in enumerate(finallines):
 #    if i==50:
 #        break
 #    print("Line",i,"length",len(l[0]),(l[0][0],l[1][0]),(l[0][-1],l[1][-1]))
     
-fd=open(fbase+"_a.pkl",'wb')
-pickle.dump(finallines,fd)
+#fd=open(fbase+"_a.pkl",'wb')
+#pickle.dump(finallines,fd)
 #plt.imshow(Z)
 #lim=plt.axis()
 #for l in lines[:300]:

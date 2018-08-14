@@ -47,15 +47,26 @@ def linedist(l1,l2):
     else:
         return d2,True
 
+def condense_images(files,ratio,outfile):
+    drawDebug=False
+    zs=[cv2.imread(f,cv2.IMREAD_GRAYSCALE)/255.0 for f in files]
+    for i in range(1,len(zs)):
+        zs[0]+=zs[i]
+    res=((zs[0]/len(zs)>ratio)*255).astype(np.uint8)
+    print(res)
+    cv2.imwrite(outfile,res)
+ 
+
 def make_lines_from_images(files,crop):
     drawDebug=False
     lines=[]
     for f in files:
         Z=cv2.imread(f,cv2.IMREAD_GRAYSCALE)
-        Z[:crop[0][1],:]=0
-        Z[crop[1][1]:,:]=0
-        Z[:,:crop[0][0]]=0
-        Z[:,crop[1][0]:]=0
+        if crop is not None:
+            Z[:crop[0][1],:]=0
+            Z[crop[1][1]:,:]=0
+            Z[:,:crop[0][0]]=0
+            Z[:,crop[1][0]:]=0
         skel=skm.medial_axis(Z)
         print("processing %s"%(f))
     
