@@ -112,6 +112,55 @@ def make_lines_from_images(files,crop):
            plt.show()
     return lines
 
+
+def make_lines_from_image(Z):
+    drawDebug=False
+    lines=[]
+    skel=skm.medial_axis(Z)
+
+    print("Generating graph...")
+    t1=time.clock()
+    nodes=[]
+    edges=[]
+    idx=np.ones_like(skel,dtype=np.int32)*-1
+    for i,j in  it.product(range(skel.shape[0]), range(skel.shape[1])):
+        if skel[i,j]>0:
+            idx[i,j]=len(nodes)
+            nodes.append( (i,j) )
+            # im sure to already have covered all the j's for i-1
+            if j>0 and idx[i,j-1]>=0:
+                edges.append( (idx[i,j-1],idx[i,j]) )
+            if i>0:
+                if j>0 and idx[i-1,j-1]>=0:
+                   edges.append( (idx[i-1,j-1],idx[i,j]) )
+                if idx[i-1,j]>=0:
+                   edges.append( (idx[i-1,j],idx[i,j]) )
+                if j<skel.shape[1]-1 and idx[i-1,j+1]>=0:
+                   edges.append( (idx[i-1,j+1],idx[i,j]) )
+    print("find nodes and edges: %f"%(time.clock()-t1))
+    
+    g=Graph(nodes,edges)
+    print("graph: %f"%(time.clock()-t1))
+    print("Graph has %d nodes and %d edges"%(len(g.nodes),len(g.edges)))
+    print("Remove small tangles...")
+    t1=time.clock()
+    g.remove_3cycles()
+    print ("Remove tangles: %f"%(time.clock()-t1))
+    t1=time.clock()
+    g.remove_pseudonodes()
+    print ("Remove pseudonodes: %f"%(time.clock()-t1))
+    print("Graph has %d nodes and %d edges"%(len(g.nodes),len(g.edges)))
+    lines.extend([list(g.get_polyline(e)) for e in g.edges ])
+    if drawDebug:    
+       plt.imshow(Z+skel)
+       lim=plt.axis()
+       drawgraph(g)
+       plt.axis(lim)
+       plt.title("Graph")
+       plt.show()
+    return lines
+
+
 def organize_lines(lines):
     t1=time.clock()
 

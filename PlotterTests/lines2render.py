@@ -104,6 +104,7 @@ else:
               if len(line)>1:
                  pts=list(map(xform,line))
                  ofd.write("PU%d,%d;"%pts[0])
+                 ofd.write("PD%d,%d;"%pts[0])
                  ofd.write("PD%d,%d"%pts[1])
                  for p in pts[2:]:
                     ofd.write(",%d,%d"%p)
