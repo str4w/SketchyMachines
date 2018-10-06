@@ -14,7 +14,7 @@ static final int RENDER_CIRCLES=5;
 int theMode=Mode.RENDER_LINE2;
 boolean makePDF=true;
 boolean writeLinesToFile=true;
-String LineFileName="Raccoon.lines";
+String LineFileName="wall.lines";
 String PDFFileName="output.pdf";
 
 void setup()
@@ -22,7 +22,7 @@ void setup()
   //PImage InputImage=loadImage("../../data/Che_Guevara.png");
   //PImage InputImage=loadImage("../../data/Alan_Turing.jpg");
   //PImage InputImage=loadImage("../../data/raccoon.png");
-  PImage InputImage=loadImage("../../data/raccoon_mod.png");
+  PImage InputImage=loadImage("walledges.png");
   // raccoon originally from https://www.photo-elsoar.com/raccoon-free-pictures.html
   InputImage.loadPixels();
   
@@ -168,13 +168,13 @@ void draw()
      //ellipseMode(RADIUS);
      float alwaysOff =120;
      float alwaysOn =50;
-     float fineSpacing=2;
+     float fineSpacing=3;
      float Spacing=12.0;
      float centerx=width/2;
      float centery=height/2;
 
      
-     float angle=45.*PI/180.;
+     float angle=5.*PI/180.;
      float initialStep=Spacing;
      float dx=cos(angle);
      float dy=sin(angle);
