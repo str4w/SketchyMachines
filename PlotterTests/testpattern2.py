@@ -5,15 +5,23 @@ Created on Wed Aug 15 22:40:48 2018
 
 @author: rupert
 """
+import argparse
+parser=argparse.ArgumentParser()
+parser.add_argument("--pens",type=int, default=1,help="Specify number of pens")
+parser.add_argument("--number",type=int, default=10,help="Specify number of lines")
+args=parser.parse_args()
 
-fd=open("testpattern2.lines",'w')
-for i in range(10):
-    fd.write("PEN 0\n")
-    fd.write("%f %f %f %f\n"%(i/1.0,-20+i,i/1.0,20-i))
-    fd.write("PEN 1\n")
-    fd.write("%f %f %f %f\n"%(i/1.0,20-i,30-i/1.0,20-i))
-    fd.write("PEN 2\n")
-    fd.write("%f %f %f %f\n"%(30-i/1.0,-20+i,30-i/1.0,20-i))
-    fd.write("PEN 3\n")
-    fd.write("%f %f %f %f\n"%(30-i/1.0,-20+i,i/1.0,-20+i))
-fd.close()
+pens=max(args.pens,1)
+
+pen=0
+print("PEN 0")
+
+for i in range(args.number):
+    if pens>1:
+       pen=(pen+1)%pens
+       print("PEN %d"%(pen))
+    r=i+1.0
+    print("%f %f %f %f"%(-r,-r,r,-r))
+    print("%f %f %f %f"%( r, r,-r, r))
+    print("%f %f %f %f"%(-r, r,-r,-r))
+    print("%f %f %f %f"%( r,-r,r, r))

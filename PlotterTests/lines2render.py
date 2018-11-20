@@ -1,5 +1,12 @@
 from __future__ import print_function
 import sys
+import argparse
+
+parser=argparse.ArgumentParser()
+parser.add_argument("--frame",action="store_true",help="Draw a frame around drawing")
+parser.add_argument("--signature",type=str, help="Add a signature note in bottom left")
+args=parser.parse_args()
+
 
 def getExtension(s):
    A=s.split('.')
@@ -97,6 +104,17 @@ else:
            ofd.write("IN;")
            def xform(p):
               return int(0.5+olimits[0]+s*(p[0]-limits[0])),int(0.5+olimits[1]+s*(p[1]-limits[1]))
+           pen=0
+           cp=pen
+           ofd.write("SP%d;\n"%(pen+1,))
+           ofd.write("PU%d,%d;"%(olimits[0],olimits[1]))
+           for i in range(3):
+               ofd.write("PD%d,%d"%(olimits[0],olimits[1]))
+               ofd.write(",%d,%d"%(olimits[2],olimits[1]))
+               ofd.write(",%d,%d"%(olimits[2],olimits[3]))
+               ofd.write(",%d,%d"%(olimits[0],olimits[3]))
+               ofd.write(",%d,%d"%(olimits[0],olimits[1]))
+               ofd.write(";\n")
            for pen,line in lines:
               if pen != cp:
                  ofd.write("SP%d;\n"%(pen+1,))
