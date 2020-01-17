@@ -1,4 +1,5 @@
 ;http://www.sxlist.com/techref/language/hpgl.htm
+;HPGL does not support comments - strip this comments manually
 IN;
 SP1;
 PU3000,4000;
