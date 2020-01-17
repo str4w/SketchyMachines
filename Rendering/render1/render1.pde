@@ -12,8 +12,8 @@ static final int RENDER_VDCIRCLE=4;
 static final int RENDER_CIRCLES=5;
 };
 int theMode=Mode.RENDER_LINE2;
-boolean makePDF=true;
-boolean writeLinesToFile=true;
+boolean makePDF=false;
+boolean writeLinesToFile=false;
 String LineFileName="Raccoon.lines";
 String PDFFileName="output.pdf";
 

@@ -97,7 +97,79 @@ class Graph:
                 self.edges[-1].line=e.line[middleVertexIndex+1:]
                 e.n1=newNodeIndex
                 e.line=e.line[:middleVertexIndex]
+    # def remove_dangles(self):
+    #     nodeCount=0
+    #     newNodeIndex=[-1,]*len(self.nodes)
+    #     nodeToEdgeIndex=[-1,]*len(self.nodes)
+    #     edgesToKeep =[ True,]*len(self.edges)
+    #     def reverse_edge(e):
+    #         n0=self.edges[e].n0
+    #         n1=self.edges[e].n1
+    #         self.edges[e].n0=n1
+    #         self.edges[e].n1=n0
+    #         self.edges[e].line.reverse()
+    #         found=replace_in_list(self.nodes[n0].el,(e,1),(e,-1))
+    #         assert(found==1)
+    #         found=replace_in_list(self.nodes[n1].el,(e,-1),(e,1))
+    #         assert(found==1)
+    #     def join_edge(e0,e1):
+    #         #print "append edge",e1,"to",e0
+    #         midnode=self.nodes[self.edges[e0].n1]
+    #         self.edges[e0].line.append( midnode.vertex )
+    #         self.edges[e0].line.extend( self.edges[e1].line )
+    #         self.edges[e0].n1=self.edges[e1].n1
+    #         found=replace_in_list(self.nodes[self.edges[e0].n1].el,(e1,-1),(e0,-1))
+    #         assert(found==1)
+            
+    #     edgeLookup=[-1,]*len(self.edges)
+    #     for i in range(len(self.nodes)):
+    #        keepNode=True
+    #        if len(self.nodes[i].el)==2:
+    #            e0=self.nodes[i].el[0] 
+    #            e1=self.nodes[i].el[1]
+    #            if e0[0] != e1[0]:
+    #               #print "remove node",i
+    #               #print self.nodes[i]
+    #               # remove pseudonode
+    #               keepNode=False
+    #               if e0[1] ==  e1[1]:
+    #                   reverse_edge(e1[0])
+    #               if e0[1] < 0:
+    #                   join_edge(e0[0],e1[0])
+    #                   edgesToKeep[e1[0]]=0
+    #                   edgeLookup[e1[0]]=e0[0]
+    #                   nodeToEdgeIndex[i]=e0[0]
+    #               else:
+    #                   join_edge(e1[0],e0[0])
+    #                   edgesToKeep[e0[0]]=0
+    #                   edgeLookup[e0[0]]=e1[0]
+    #                   nodeToEdgeIndex[i]=e1[0]
+    #        if keepNode:
+    #            newNodeIndex[i]=nodeCount
+    #            nodeCount += 1
+    #     self.nodes=[self.nodes[i] for i in range(len(self.nodes)) if newNodeIndex[i] >=0]
+    #     newEdgeIndex=[-1,]*len(self.edges)
+    #     newEdgeCount=0
+    #     for i in range(len(self.edges)):
+    #         if edgesToKeep[i]:
+    #             self.edges[i].n0=newNodeIndex[self.edges[i].n0]
+    #             self.edges[i].n1=newNodeIndex[self.edges[i].n1]
+    #             newEdgeIndex[i]=newEdgeCount
+    #             newEdgeCount+=1
+    #     for i in range(len(nodeToEdgeIndex)):
+    #         if nodeToEdgeIndex[i]>=0:
+    #             while edgeLookup[nodeToEdgeIndex[i]]>=0:
+    #                 nodeToEdgeIndex[i]=edgeLookup[nodeToEdgeIndex[i]]
+    #             nodeToEdgeIndex[i]=newEdgeIndex[nodeToEdgeIndex[i]]
+    #     self.edges=[self.edges[i] for i in range(len(self.edges)) if newEdgeIndex[i] >=0]
+    #     for i in range(len(self.nodes)):
+    #         #print "Nodescan\n",self.nodes[i]
+    #         for e in range(len(self.nodes[i].el)):
+    #            self.nodes[i].el[e]=(newEdgeIndex[self.nodes[i].el[e][0]],self.nodes[i].el[e][1])
+    #            assert(self.nodes[i].el[e][0]>=0)
         
+    #     return newNodeIndex,newEdgeIndex,nodeToEdgeIndex        
+    
     def remove_pseudonodes(self):
         nodeCount=0
         newNodeIndex=[-1,]*len(self.nodes)

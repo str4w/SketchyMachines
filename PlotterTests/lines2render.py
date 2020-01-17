@@ -3,8 +3,12 @@ import sys
 import argparse
 
 parser=argparse.ArgumentParser()
-parser.add_argument("--frame",action="store_true",help="Draw a frame around drawing")
-parser.add_argument("--signature",type=str, help="Add a signature note in bottom left")
+parser.add_argument("inputfile",type=str, help="Input file of lines")
+parser.add_argument("x_low",type=float, help="Lower X coord of output box")
+parser.add_argument("y_low",type=float, help="Lower Y coord of output box")
+parser.add_argument("x_high",type=float, help="Upper X coord of output box")
+parser.add_argument("y_high",type=float, help="Upper Y coord of output box")
+parser.add_argument("outputfile",type=str, help="Output file (.svg or .hpgl)")
 args=parser.parse_args()
 
 
@@ -18,13 +22,13 @@ def getExtension(s):
    return None
 
 colorstrings=["#000000","#FF0000","#00FF00","#0000FF","#FFFF00","#FF00FF","#00FFFF"]
-
-if len(sys.argv) != 7 or getExtension(sys.argv[6]) is None:
+extension=getExtension(args.outputfile)
+if extension is None:
     print("Usage: lines2render.py inputfile lowx lowy highx highy outputfile")
     print("       outputfile should end in either .hpgl or .svg")
 else:
     limits=[1.e30,1.e30,-1.e30,-1.e30]
-    fd=open(sys.argv[1])
+    fd=open(args.inputfile)
     lines=[]
     pointscount=0
     currentPen=0
@@ -53,11 +57,11 @@ else:
               limits[3]=max(y,limits[3])
     print("Found %d lines with %d points.  Extent (%f,%f)->(%f,%f)"%(len(lines),pointscount,limits[0],limits[1],limits[2],limits[3]))
     print("Found a maximum pen of",maxPen)
-    olimits=list(map(float,sys.argv[2:6]))
+    olimits=[args.x_low,args.y_low,args.x_high,args.y_high]
     s=min((olimits[2]-olimits[0])/(limits[2]-limits[0]),(olimits[3]-olimits[1])/(limits[3]-limits[1]))
-    if getExtension(sys.argv[6]) == "svg":
+    if extension == "svg":
         print("Writing as svg")
-        with open(sys.argv[6],'w') as ofd:
+        with open(args.outputfile,'w') as ofd:
            ofd.write(
 """<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -85,36 +89,27 @@ else:
 """
 )
            def xform(p):
-              return olimits[0]+s*(p[0]-limits[0]),olimits[1]+s*(p[1]-limits[1])
+              return olimits[0]+s*(p[0]-limits[0]),olimits[3]-s*(p[1]-limits[1])
            for i,(pen,line) in enumerate(lines):
               if len(line)>1:
                  pts=list(map(xform,line))
                  ofd.write('   <path\n')
                  ofd.write('      id="path%d"\n'%(i,))
-                 ofd.write('      style="stroke: '+colorstrings[pen%len(colorstrings)]+'; fill:none;"\n')
-                 ofd.write('      d="m %f,%f '%pts[0])
+                 ofd.write('      style="stroke: '+colorstrings[pen%len(colorstrings)]+'; stroke-width:0.4; fill:none;"\n')
+                 ofd.write('      d="M%f,%f '%pts[0])
                  for i in range(1,len(pts)):
-                    ofd.write("%f,%f "%(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]))
+                    ofd.write("l%f,%f "%(pts[i][0]-pts[i-1][0],pts[i][1]-pts[i-1][1]))
                  ofd.write('" />\n')
            ofd.write('</svg>\n')
-    elif getExtension(sys.argv[6]) == "hpgl":
+    elif extension == "hpgl":
         print("Writing as hpgl")
-        with open(sys.argv[6],'w') as ofd:
+        with open(args.outputfile,'w') as ofd:
            cp=-1
            ofd.write("IN;")
            def xform(p):
               return int(0.5+olimits[0]+s*(p[0]-limits[0])),int(0.5+olimits[1]+s*(p[1]-limits[1]))
            pen=0
-           cp=pen
-           ofd.write("SP%d;\n"%(pen+1,))
-           ofd.write("PU%d,%d;"%(olimits[0],olimits[1]))
-           for i in range(3):
-               ofd.write("PD%d,%d"%(olimits[0],olimits[1]))
-               ofd.write(",%d,%d"%(olimits[2],olimits[1]))
-               ofd.write(",%d,%d"%(olimits[2],olimits[3]))
-               ofd.write(",%d,%d"%(olimits[0],olimits[3]))
-               ofd.write(",%d,%d"%(olimits[0],olimits[1]))
-               ofd.write(";\n")
+           cp=-1
            for pen,line in lines:
               if pen != cp:
                  ofd.write("SP%d;\n"%(pen+1,))
