@@ -5,6 +5,7 @@ import argparse
 from line_tools import read_line_file, write_lines
 
 parser=argparse.ArgumentParser()
+parser.add_argument("--like",type=str, help="Scale like this file")
 parser.add_argument("--fix_aspect",action="store_true",help="fix aspect ratio of composed drawing")
 parser.add_argument("--reverse_order",action="store_true",help="Draw addition before base drawing")
 parser.add_argument("--pen_shift",type=int, default=0, help="Shift the pens in the addition by this")
@@ -22,7 +23,11 @@ args=parser.parse_args()
 
 
 base_lines, base_limits, base_max_pen=read_line_file(args.base)
-add_lines, add_limits, add_max_pen=read_line_file(args.addition)
+if args.like is not None:
+    _, add_limits, _=read_line_file(args.like)
+    add_lines, _, add_max_pen=read_line_file(args.addition)
+else:
+    add_lines, add_limits, add_max_pen=read_line_file(args.addition)
 
 print("Base file has %d lines, max pen %d.  Extent (%f,%f)->(%f,%f)"%(len(base_lines),base_max_pen,
                                                      base_limits[0],base_limits[1],base_limits[2],base_limits[3]))

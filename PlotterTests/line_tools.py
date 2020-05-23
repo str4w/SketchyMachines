@@ -7,6 +7,8 @@ def read_line_file(filename):
         currentPen=0
         maxPen=0
         for line in fd:
+            if len(line.strip())==0:
+                continue
             if line[:3]=="PEN":
                 tmp=line.split()
                 assert(len(tmp)==2)

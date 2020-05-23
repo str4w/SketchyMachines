@@ -13,17 +13,103 @@ static final int RENDER_CIRCLES=5;
 };
 int theMode=Mode.RENDER_LINE2;
 boolean makePDF=false;
-boolean writeLinesToFile=false;
-String LineFileName="Raccoon.lines";
+boolean writeLinesToFile=true;
+
+// stained glass
+float line2_alwaysOff =130;
+float line2_alwaysOn =30;
+float line2_fineSpacing=4;//2;
+float line2_Spacing=16;//16;//12.0;
+
+float line2_angle=45.*PI/180.;
+String InputFileName="../../SourceMaterial/stained_glass_darkblue_threshold.png";
+String LineFileName="stained_glass_darkblue.lines";
+
+//float line2_angle=-45.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_lightblue_threshold.png";
+//String LineFileName="stained_glass_lightblue.lines";
+
+//float line2_angle=25.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_darkgreen_threshold.png";
+//String LineFileName="stained_glass_darkgreen.lines";
+
+//float line2_angle=35.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_lightgreen_threshold.png";
+//String LineFileName="stained_glass_lightgreen.lines";
+
+//float line2_angle=60.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_yellow_threshold.png";
+//String LineFileName="stained_glass_yellow.lines";
+
+//float line2_angle=-30.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_pink_threshold.png";
+//String LineFileName="stained_glass_pink.lines";
+
+//float line2_angle=10.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_red_threshold.png";
+//String LineFileName="stained_glass_red.lines";
+
+//float line2_angle=0.*PI/180.;
+//String InputFileName="../../SourceMaterial/stained_glass_blackfill_threshold.png";
+//String LineFileName="stained_glass_blackfill.lines";
+
+//String InputFileName="../../SourceMaterial/xi_cropped.png";
+//String LineFileName="xi.lines";
+//String InputFileName="../../SourceMaterial/conway_cropped.png";
+//String LineFileName="conway.lines";
+//String InputFileName="../../SourceMaterial/roses_red.png";
+//String LineFileName="roses_red.lines";
+//String InputFileName="../../SourceMaterial/trump.jpeg";
+//String LineFileName="Trump.lines";
+  //PImage InputImage=loadImage("../../SourceMaterial/groseille1.png");
+//String LineFileName="conway.lines";
+  //PImage InputImage=loadImage("../../SourceMaterial/Che_Guevara.png");
+//String LineFileName="conway.lines";
+//String InputFileName="../../SourceMaterial/Alan_Turing.jpg";
+//String LineFileName="turing.lines";
+  //PImage InputImage=loadImage("../../data/raccoon.png");
+//String LineFileName="conway.lines";
+//String InputFileName="../../SourceMaterial/raccoon_mod.png";
+//String LineFileName="raccoon.lines";
+  // raccoon originally from https://www.photo-elsoar.com/raccoon-free-pictures.html
 String PDFFileName="output.pdf";
+// Halftone parameters
+float halftone_minRadius =0.0;
+float halftone_maxRadius =2.0;
+// Render_line parameters
+float line_minRadius =-0.5;
+float line_maxRadius =2.0;
+float line_angle=45.*PI/180.;
+// Render_line2 parameters
+//float line2_alwaysOff =130;
+//float line2_alwaysOn =30;
+//float line2_fineSpacing=8;//4;//2;
+//float line2_Spacing=32;//16;//12.0;
+//float line2_angle=45.*PI/180.;
+
+//float line2_alwaysOff =180;
+//float line2_alwaysOn =50;
+//float line2_fineSpacing=1;
+//float line2_Spacing=12.0;
+//float line2_angle=-45.*PI/180.;
+
+//xi
+//float line2_alwaysOff =120;
+//float line2_alwaysOn =50;
+//float line2_fineSpacing=3;
+//float line2_Spacing=16.0;
+//float line2_angle=-45.*PI/180.;
+
+//Che
+//float line2_alwaysOff =120;
+//float line2_alwaysOn =50;
+//float line2_fineSpacing=2;
+//float line2_Spacing=12.0;
+//float line2_angle=45.*PI/180.;
 
 void setup()
 {
-  //PImage InputImage=loadImage("../../data/Che_Guevara.png");
-  //PImage InputImage=loadImage("../../data/Alan_Turing.jpg");
-  //PImage InputImage=loadImage("../../data/raccoon.png");
-  PImage InputImage=loadImage("../../data/raccoon_mod.png");
-  // raccoon originally from https://www.photo-elsoar.com/raccoon-free-pictures.html
+  PImage InputImage=loadImage(InputFileName);
   InputImage.loadPixels();
   
   size(1000,1000);
@@ -47,11 +133,11 @@ void draw()
 
    PImage dasImage=TheBuffer.get(0,0,TheBuffer.width,TheBuffer.height);
    dasImage.loadPixels();
-   float hscale=float(width)/float(dasImage.width);
-   float vscale=float(height)/float(dasImage.height);
+   float hscale=1.;//float(width)/float(dasImage.width);
+   float vscale=1.;//float(height)/float(dasImage.height);
    float scale = (abs(1-hscale)<abs(1-vscale))?hscale:vscale;
-   float xoffset=(width-dasImage.width*scale)/2;
-   float yoffset=(height-dasImage.height*scale)/2;
+   float xoffset=0;//(width-dasImage.width*scale)/2;
+   float yoffset=0;//(height-dasImage.height*scale)/2;
    //image(dasImage,0,0);
    
    switch(theMode){
@@ -61,8 +147,8 @@ void draw()
      noStroke();
      fill(0);
      ellipseMode(RADIUS);
-     float minRadius =0.0;
-     float maxRadius =2.0;
+     float minRadius =halftone_minRadius;
+     float maxRadius =halftone_maxRadius;
      float Spacing=3*maxRadius+1;
    
      int initialStep=int(Spacing/2+1);
@@ -112,10 +198,10 @@ void draw()
      noStroke();
      fill(0);
      ellipseMode(RADIUS);
-     float minRadius =-0.5;
-     float maxRadius =2.0;
+     float minRadius = line_minRadius;
+     float maxRadius = line_maxRadius;
+     float angle= line_angle;
      float Spacing=3.0*maxRadius+1;
-     float angle=45.*PI/180.;
      float initialStep=Spacing;
      float dx=cos(angle);
      float dy=sin(angle);
@@ -166,15 +252,15 @@ void draw()
      noFill();
      //fill(0);
      //ellipseMode(RADIUS);
-     float alwaysOff =120;
-     float alwaysOn =50;
-     float fineSpacing=2;
-     float Spacing=12.0;
+     float alwaysOff =line2_alwaysOff;
+     float alwaysOn =line2_alwaysOn;
+     float fineSpacing=line2_fineSpacing;
+     float Spacing=line2_Spacing;
+     float angle=line2_angle;
      float centerx=width/2;
      float centery=height/2;
 
      
-     float angle=45.*PI/180.;
      float initialStep=Spacing;
      float dx=cos(angle);
      float dy=sin(angle);
@@ -364,13 +450,15 @@ void draw()
      //ellipseMode(RADIUS);
      float alwaysOff =200;
      float alwaysOn =50;
-     float fineSpacing=0.5;
-     float Spacing=6.0;
+     //float fineSpacing=0.5;
+     //float Spacing=6.0;
+     float fineSpacing=5;
+     float Spacing=24.0;
      float centerx=width/2;
      float centery=height/2;
      //beginRecord(PDF,"render1.pdf");
-     PrintWriter output=createWriter("render1.svg");
-     output.println("<svg  xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
+     //PrintWriter output=createWriter("render1.svg");
+     //output.println("<svg  xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\">");
   
      for(float r=.5;r<sqrt(centerx*centerx+centery*centery);r+=fineSpacing) 
      {
@@ -410,30 +498,31 @@ void draw()
            int count=0;
            while(step<nSteps && drawIt[step])
            {
-             if(count==0) 
-             {
-                 output.print("<path d=\"m "+
-               str(xVertices[step]) +","+str(yVertices[step])+" ");
-             }
-             else
-             {
-               output.print(str(xVertices[step]-xVertices[step-1]) +","+str(yVertices[step]-yVertices[step-1])+" ");
-             }
+             //if(count==0) 
+             //{
+              //   output.print("<path d=\"m "+
+              // str(xVertices[step]) +","+str(yVertices[step])+" ");
+            // }
+             //else
+             //{
+               //output.print(str(xVertices[step]-xVertices[step-1]) +","+str(yVertices[step]-yVertices[step-1])+" ");
+               if (writeLinesToFile) { output.print(xVertices[step]); output.print(" "); output.print(-1*yVertices[step]); output.print(" "); }
+             //}
              vertex(xVertices[step],yVertices[step]);
               ++step;
               ++count;
            }
            if(count>0)
            {
-               output.println("\" style=\"stroke: #000000; fill:none;\"/>");
-  
+               //output.println("\" style=\"stroke: #000000; fill:none;\"/>");
+               if (writeLinesToFile) { output.println(); }
            }
            endShape();
         }
      
-     output.println("</svg>");
-     output.flush();
-     output.close();
+     //output.println("</svg>");
+     //output.flush();
+     //output.close();
      }
    }
   }

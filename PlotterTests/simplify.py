@@ -16,6 +16,16 @@ args=parser.parse_args()
 
 lines, limits, max_pen=read_line_file(args.input)
 
-newlines=[(pen,rdp.rdp(line,args.epsilon)) for pen,line in lines ]
+#newlines=[(pen,rdp.rdp(line,args.epsilon)) for pen,line in lines ]
+newlines=[]
+countbefore=0
+countafter=0
+for i,( pen,line) in enumerate(lines):
+  filtered=rdp.rdp(line,args.epsilon)
+  countbefore+=len(line)
+  countafter+=len(filtered)
+  newlines.append((pen,filtered))
+  #print(i,"/",len(lines))
+print("Reduced",countbefore,"points to",countafter)
 with open(args.output,'w') as fd:
     write_lines(fd,newlines)
