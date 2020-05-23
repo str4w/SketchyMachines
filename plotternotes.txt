@@ -4,3 +4,20 @@ Roland 11x17 drawing area
 HP7595A
 -4418,-3660 4418,3660
 
+
+Timings
+Lines      File      time      comment
+684      AK      9 min     about 25s to start
+1811   Che       5:20      ~25 s to start
+3214   Raccoon  6.41
+
+Simplifying lines brought AK down to 2:26.  Organizing lines had minimal effect
+
+May 6, 2020
+Some thoughts on rendering
+Primitive pic does both additive and subtractive color mixing, i.e. it can both brighten and darken - this is not 
+how ink works.  Cost function is also some type of mean squares, maybe this is not the best.
+
+Need to set up an optimizer like this, but with both different constraints on drawing, different types of cost
+function, and guided search.
+
