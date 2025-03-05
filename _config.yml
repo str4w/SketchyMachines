@@ -36,6 +36,11 @@ plugins:
 
 minima:
   skin: solarized-dark
+# 2025-03-05 did this
+# https://stackoverflow.com/questions/60231233/editing-the-footer-in-github-pages-jekylls-default-minima-theme
+# cp -R `echo "$(bundle info minima --path)/_*/"` .
+# cp -R "$(bundle info minima --path)/assets/" .
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
