@@ -17,17 +17,34 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
+#
+# Useful info
+#
+# If working on this in a codespace, don't forget to shut it down here
+# https://github.com/codespaces
+#
+# Testing
+# https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/testing-your-github-pages-site-locally-with-jekyll
+# bundle install # once per codespace session
+# bundle exec jekyll serve --baseurl=""
 
 title: Sketchy Machines
-email: your-email@example.com
+#email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
+  Writeups of various personal projects relating to machine drawing and
+  painting.  
 #baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: verytiredrobot
 github_username:  str4w
+instagram_username: sketchymachines
+mastodon_username: rupert
+mastodon_instance: genart.social
+bluesky_username: verytiredrobot
+bluesky_instance: bsky.social
+pixelfed_username: sketchymachines
+pixelfed_instance: pxlfd.ca
+
 
 # Build settings
 theme: minima

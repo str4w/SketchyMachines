@@ -7,25 +7,44 @@
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
-        <ul class="contact-list">
-          <li class="p-name">
-            {%- if site.author -%}
-              {{ site.author | escape }}
-            {%- else -%}
-              {{ site.title | escape }}
-            {%- endif -%}
-            </li>
-            {%- if site.email -%}
-            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
-            {%- endif -%}
+        <ul class="social-media-list">
+          {%- if site.github_username -%}
+             <li>
+              <a href="https://github.com/{{ site.github_username| cgi_escape | escape }}">
+                <img class="svg-icon" src="{{ '/assets/github-mark.svg' | relative_url }}"> 
+                <span class="username">{{ site.github_username| escape }}</span></a></li>
+          {%- endif -%}
+          {%- if site.instagram_username -%}
+              <li>
+                <a href="https://instagram.com/{{ site.instagram_username| cgi_escape | escape }}">
+                  <img class="svg-icon" src="{{ '/assets/Instagram_Glyph_Black.svg' | relative_url }}"> 
+                  <span class="username">{{ site.instagram_username| escape }}</span></a></li>
+          {%- endif -%}
+          {%- if site.mastodon_username and site.mastodon_instance -%}
+              <li>
+                <a href="https://{{ site.mastodon_instance| cgi_escape | escape}}/@{{site.mastodon_username}}">
+                  <img class="svg-icon" src="{{ '/assets/mastodon-logo-purple.svg' | relative_url }}">  
+                  <span class="username">@{{ site.mastodon_username|escape }}@{{site.mastodon_instance|escape}}</span></a></li>
+          {%- endif -%}
+          {%- if site.bluesky_username and site.bluesky_instance -%}
+              <li><a href="https://{{site.bluesky_username}}.{{ site.bluesky_instance| cgi_escape | escape}}">
+                <img class="svg-icon" src="{{ '/assets/bluesky.svg' | relative_url }}"> 
+                <span class="username">{{ site.bluesky_username|escape }}.{{ site.bluesky_instance|escape }}</span></a></li>
+          {%- endif -%}
+          {%- if site.pixelfed_username and site.pixelfed_instance -%}
+              <li><a href="https://{{ site.pixelfed_instance| cgi_escape | escape}}/{{site.pixelfed_username}}">
+                <img class="svg-icon" src="{{ '/assets/pixelfed-icon-color.svg' | relative_url }}"> 
+                <span class="username">{{site.pixelfed_instance|escape}}/{{ site.pixelfed_username|escape }}</span></a></li>
+          {%- endif -%}
+          {%- if site.twitter_username -%}
+              <li><a href="https://www.x.com/{{ site.twitter_username| cgi_escape | escape }}">
+                <img class="svg-icon" src="{{ '/assets/x-logo.svg' | relative_url }}"> 
+                <span class="username">{{ site.twitter_username| escape }}</span></a>(inactive)</li>
+          {%- endif -%}
         </ul>
       </div>
 
       <div class="footer-col footer-col-2">
-        {%- include social.html -%}
-      </div>
-
-      <div class="footer-col footer-col-3">
         <p>{{- site.description | escape -}}</p>
       </div>
     </div>
