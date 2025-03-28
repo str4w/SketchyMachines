@@ -31,8 +31,9 @@
 title: Sketchy Machines
 #email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Writeups of various personal projects relating to machine drawing and
-  painting.  
+  Writeups of various personal projects relating to plotter art and machine learning.  Comments, 
+  questions? Reach out on social media (preferably Mastodon) or email me at 
+  rupert at rupertbrooks dot ca  
 #baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: verytiredrobot
